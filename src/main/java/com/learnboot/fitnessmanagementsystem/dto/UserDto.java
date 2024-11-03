@@ -30,4 +30,5 @@ public class UserDto {
     private LocalDateTime createdBy;
     private String specialization;
     private List<AddressDto> address;
+    private List<AppointmentDto> appointments;
 }

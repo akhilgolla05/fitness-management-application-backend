@@ -42,11 +42,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<ErrorMessage> UsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
+    public ResponseEntity<ErrorMessage> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
         ErrorMessage error = new ErrorMessage();
         error.setMessage(ex.getMessage());
         error.setTimestamp(System.currentTimeMillis());
         error.setStatusCode(HttpStatus.CONFLICT.value());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public ResponseEntity<ErrorMessage> handleIllegalArgumentException(IllegalArgumentException ex) {
+        ErrorMessage error = new ErrorMessage();
+        error.setMessage(ex.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+        error.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error);
     }
 }

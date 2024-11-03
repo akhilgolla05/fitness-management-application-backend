@@ -11,6 +11,7 @@ import com.learnboot.fitnessmanagementsystem.repository.UserRepository;
 import com.learnboot.fitnessmanagementsystem.request.UserCreationRequest;
 import com.learnboot.fitnessmanagementsystem.request.UserUpdateRequest;
 import com.learnboot.fitnessmanagementsystem.service.address.AddressService;
+import com.learnboot.fitnessmanagementsystem.service.appointment.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,26 +31,21 @@ public class UserService implements IUserService {
     private final ModelMapper modelMapper;
     private final AddressService addressService;
     private final AddressRepository addressRepository;
+    private final AppointmentService appointmentService;
 
     @Override
     public UserDto createUser(UserCreationRequest request) {
         log.info("UserService :: createUser");
         User user =  userCreation.createUser(request);
         AddressDto addressDto = addressService.createAddress(request.getAddress(),user.getId());
-        UserDto userDto =  modelMapper.map(user, UserDto.class);
-        userDto.setAddress(addressService.getAddressesForUser(user.getId()));
-        return userDto;
+        return convertUserToUserDto(user);
     }
 
     @Override
     public UserDto getUserById(Long userId) {
         log.info("UserService :: getUserById");
         return userRepository.findById(userId)
-                .map(user -> {
-                    UserDto userDto = modelMapper.map(user, UserDto.class);
-                    userDto.setAddress(addressService.getAddressesForUser(userId));
-                    return userDto;
-                })
+                .map(this::convertUserToUserDto)
                 .orElseThrow(()-> new ResourceNotFoundException("User with id " + userId + " not found"));
     }
 
@@ -66,7 +62,7 @@ public class UserService implements IUserService {
                     user.setPhoneNumber(request.getPhoneNumber());
                     user.setSpecialization(request.getSpecialization());
                     User updatedUser =  userRepository.save(user);
-                    return modelMapper.map(updatedUser, UserDto.class);
+                    return convertUserToUserDto(updatedUser);
                 })
                 .orElseThrow(()-> new ResourceNotFoundException("User with id " + userId + " not found"));
     }
@@ -91,7 +87,14 @@ public class UserService implements IUserService {
     @Override
     public List<UserDto> getAllUsers(){
         log.info("UserService :: getAllUsers");
-        return userRepository.findAll()
-                .stream().map(user->modelMapper.map(user,UserDto.class)).toList();
+        return (List<UserDto>) userRepository.findAll()
+                .stream().map(this::convertUserToUserDto).toList();
+    }
+    private UserDto convertUserToUserDto(User user){
+        log.info("UserService :: convertUserToUserDto");
+        UserDto userDto =  modelMapper.map(user, UserDto.class);
+        userDto.setAddress(addressService.getAddressesForUser(user.getId()));
+        userDto.setAppointments(appointmentService.getAllAppointmentsForAUser(user.getId()));
+        return userDto;
     }
 }
