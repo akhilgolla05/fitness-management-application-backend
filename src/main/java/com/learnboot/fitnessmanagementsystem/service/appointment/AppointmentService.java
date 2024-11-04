@@ -31,11 +31,12 @@ public class AppointmentService implements IAppointmentService {
     private final ModelMapper modelMapper;
 
     @Override
-    public AppointmentDto createAppointment(CreateAppointmentRequest request, long senderId, long recepientId) {
+    public AppointmentDto createAppointment(CreateAppointmentRequest request, long studentId,
+                                            long trainerId) {
 
-        User student = userRepository.findById(senderId)
+        User student = userRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        Optional<User> trainer = userRepository.findById(recepientId);
+        Optional<User> trainer = userRepository.findById(trainerId);
         boolean isTrainer = false;
         if(trainer.isPresent()) {
             isTrainer = trainer.get().getUserType().equals("TRAINER") ;
@@ -48,8 +49,8 @@ public class AppointmentService implements IAppointmentService {
             appointment.setAppointmentTime(LocalTime.parse(request.getAppointmentTime()));
             appointment.setReason(request.getReason());
             appointment.setAppointmentNumber();
-            appointment.setSender(student);
-            appointment.setReceiver(trainer.get());
+            appointment.setStudent(student);
+            appointment.setTrainer(trainer.get());
             appointment.setAppointmentStatus(AppointmentStatus.PENDING);
             Appointment dbAppointment =  appointmentRepository.save(appointment);
             return mapAppointmentToDto(dbAppointment);
@@ -110,9 +111,9 @@ public class AppointmentService implements IAppointmentService {
 
     private AppointmentDto mapAppointmentToDto(Appointment appointment) {
         AppointmentDto appointmentDto = modelMapper.map(appointment, AppointmentDto.class);
-        User student= appointment.getSender();
+        User student= appointment.getStudent();
         appointmentDto.setStudent(modelMapper.map(student, StudentDto.class));
-        User trainer = appointment.getReceiver();
+        User trainer = appointment.getTrainer();
         appointmentDto.setTrainer(modelMapper.map(trainer, TrainerDto.class));
         return appointmentDto;
     }

@@ -42,9 +42,9 @@ public class Appointment {
     private AppointmentStatus appointmentStatus;
 
     @ManyToOne
-    private User sender;
+    private User student;
     @ManyToOne
-    private User receiver;
+    private User trainer;
 
 
     public void setAppointmentNumber() {

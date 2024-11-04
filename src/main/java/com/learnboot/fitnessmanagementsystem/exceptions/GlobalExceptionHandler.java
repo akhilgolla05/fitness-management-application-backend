@@ -59,4 +59,14 @@ public class GlobalExceptionHandler {
         error.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorMessage> handleRuntimeException(RuntimeException ex) {
+        ErrorMessage error = new ErrorMessage();
+        error.setMessage(ex.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+        error.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
 }
