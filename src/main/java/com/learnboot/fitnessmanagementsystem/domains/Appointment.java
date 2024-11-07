@@ -2,10 +2,7 @@ package com.learnboot.fitnessmanagementsystem.domains;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.processing.Pattern;
 
@@ -25,6 +22,7 @@ import java.util.random.RandomGenerator;
         uniqueConstraints=
         @UniqueConstraint(columnNames={"appointment_number"})
 )
+@Builder
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
+@Builder
 public class User {
 
     @Id
@@ -42,7 +43,6 @@ public class User {
     @Transient
     private String specialization;
 
-    @Transient
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Address> address;
 

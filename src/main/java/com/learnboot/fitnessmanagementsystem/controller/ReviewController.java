@@ -59,5 +59,4 @@ public class ReviewController {
        return ResponseEntity.ok(new ApiResponse("Review Found Successfully", averageRating));
     }
 
-
 }

@@ -6,6 +6,7 @@ import com.learnboot.fitnessmanagementsystem.response.ApiResponse;
 import com.learnboot.fitnessmanagementsystem.service.address.IAddressService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,14 @@ import java.util.List;
 public class AddressController {
 
     private final IAddressService addressService;
-    private final ModelMapper modelMapper;
 
     @PostMapping("/create-address/{userId}")
+    //@ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ApiResponse> addAddressForUser(@RequestBody AddressDto addressDto,
                                                          @PathVariable long userId) {
         AddressDto addressDto1 = addressService.createAddress(addressDto,userId);
-        return ResponseEntity.ok(new ApiResponse("Address Saved Successfully", addressDto1));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse("Address Saved Successfully", addressDto1));
     }
 
     @GetMapping("/get-address-for-user/{userId}")

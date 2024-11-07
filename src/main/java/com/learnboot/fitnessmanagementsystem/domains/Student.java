@@ -2,10 +2,7 @@ package com.learnboot.fitnessmanagementsystem.domains;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
@@ -13,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @PrimaryKeyJoinColumn(name = "student_id")
+//@Builder
 public class Student extends User {
 
     private long id;
