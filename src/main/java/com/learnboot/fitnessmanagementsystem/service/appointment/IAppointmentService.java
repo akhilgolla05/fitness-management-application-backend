@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public interface IAppointmentService {
-    AppointmentDto createAppointment(CreateAppointmentRequest request, long senderId, long recepientId);
+    AppointmentDto createAppointment(CreateAppointmentRequest request, long studentId, long trainerId);
 
     AppointmentDto getAppointment(long appointmentId);
 

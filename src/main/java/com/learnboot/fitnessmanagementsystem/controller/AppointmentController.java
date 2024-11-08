@@ -19,8 +19,8 @@ public class AppointmentController {
 
     @PostMapping("/create-appointment")
     public ResponseEntity<ApiResponse> createAppointment(@RequestBody CreateAppointmentRequest appointment,
-                                                         @RequestParam long senderId, @RequestParam long receiverId) {
-        AppointmentDto appointmentDto = appointmentService.createAppointment(appointment, senderId, receiverId);
+                                                         @RequestParam long studentId, @RequestParam long trainerId) {
+        AppointmentDto appointmentDto = appointmentService.createAppointment(appointment, studentId, trainerId);
         return ResponseEntity.ok(new ApiResponse("Appointment Created Successfully", appointmentDto));
 
     }
